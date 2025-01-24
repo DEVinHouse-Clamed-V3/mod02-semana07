@@ -23,7 +23,8 @@ userRouter.post("/", rotaAutenticada, async (req: Request, res: Response) => {
 
         let senha = req.body.password
 
-        const salt = await bcrypt.genSalt(10)
+        // const salt = await bcrypt.genSalt(10)
+        const salt = "jhsgafhsafgsaghf"
 
         let senhaCriptografada = await bcrypt.hash(senha, salt);
 
@@ -90,6 +91,34 @@ userRouter.delete("/:id", rotaAutenticada, async (req: Request, res: Response) =
     } catch (ex) {
         res.status(500).send("Ocorreu um erro ao executar a solicitação")
     }
+})
+
+userRouter.post("/login", async (req: Request, res: Response) => {
+    const usuarioLogin = req.body
+
+    const user = await userRepository.findOne({
+        where: {
+            login: usuarioLogin.login
+        }
+    })
+
+    if(!user){
+        res.status(400).json("Usuário não encontrado")
+        return
+    }
+
+    const salt = "jhsgafhsafgsaghf"
+
+    let isCorreto = await bcrypt.compare(usuarioLogin.password, user.password);
+
+    if(isCorreto){
+        // segue a vida
+        // aqui eu gero o token
+    } else {
+        res.status(400).json("Usuário e/ou senha inválida(o)")
+        return
+    }
+
 })
 
 export default userRouter;

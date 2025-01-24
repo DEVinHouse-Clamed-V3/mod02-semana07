@@ -1,1 +1,3 @@
 GET http://localhost:3000/users
+headers:
+    senha: 123
