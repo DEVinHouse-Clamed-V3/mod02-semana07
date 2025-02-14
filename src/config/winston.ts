@@ -11,9 +11,10 @@ const { combine, timestamp, printf, colorize, align } = winston.format;
     align(),
     printf((info: any) => `[${info.timestamp}] ${info.level}: ${info.message}`)
   ),
-  transports: [new winston.transports.File({
+  transports: [
+    new winston.transports.File({
     filename: 'logs.txt'
-  })],
+  }), new winston.transports.Console()],
 });
 
 export default logger

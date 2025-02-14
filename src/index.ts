@@ -20,17 +20,23 @@ app.use(cors()) // Permite que o express entenda requisições de outros domíni
 
 app.use(express.json()) // Permite que o express entenda JSON
 
-
 app.use("/users", userRouter)
-app.use("/products", verifyToken, productRouter)
+app.use("/products", productRouter)
 app.use("/fornecedores", fornecedorRouter )
 app.use("/login", authRouter )
+
+app.get("/env", (req, res) => {
+    res.json({
+        port: process.env.PORT,
+        node_env: process.env.NODE_ENV,
+    })
+})
 
 app.use(handleError)
 
 AppDataSource.initialize().then(() => {
-    app.listen(3000, () => {
-        logger.info("O servidor está rodando em http://localhost:3000")
+    app.listen(process.env.PORT, () => { 
+        logger.info(`O servidor está rodando em http://localhost:${process.env.PORT}`)
     })
 }).catch(error => console.log(error))
 

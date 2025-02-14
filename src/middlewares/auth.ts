@@ -1,8 +1,19 @@
-import { NextFunction, Request, response, Response } from "express";
-import jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import AppError from "../utils/AppError";
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+type dataJwt = JwtPayload & { userId: string };
+
+export interface AuthRequest extends Request {
+  userId: string;
+}
+
+export
+const verifyToken = (
+  req: Request & { userId: string },
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const token = req.headers.authorization?.split(" ")[1] ?? "";
 
@@ -10,7 +21,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
       throw new AppError("Token não informado", 401);
     }
 
-    const data = jwt.verify(token, process.env.JWT_SECRET ?? "");
+    const data = jwt.verify(token, process.env.JWT_SECRET ?? "") as dataJwt
 
     req.userId = data.userId
 

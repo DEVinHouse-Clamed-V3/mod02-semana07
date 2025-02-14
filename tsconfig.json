@@ -7,7 +7,7 @@
      ], 
      "allowJs": true,
      "outDir": "build",
-     "rootDir": "src",
+    
      "strict": true,
      "noImplicitAny": true,
      "strictPropertyInitialization": false,
@@ -17,5 +17,9 @@
      "emitDecoratorMetadata": true, 
      "skipLibCheck": true, 
      "forceConsistentCasingInFileNames": true
-   }
+   },
+   "include": [
+    "src"
+  ],
+
  }

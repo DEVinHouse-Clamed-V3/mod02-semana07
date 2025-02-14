@@ -3,6 +3,7 @@ require('dotenv').config()
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 
+
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: process.env.DB_HOST,
@@ -12,7 +13,11 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: false,
     logging: process.env.NODE_ENV === 'development' ? true : false ,
-    entities: ["src/entity/*.ts"],
-    migrations: ["src/migration/*.ts"],
+    entities: [`${__dirname}/entity/*.{ts,js}`],
+    migrations: [`${__dirname}/migration/*.{ts,js}`],
     subscribers: [],
+    ssl: process.env.NODE_ENV === 'production' ? {
+        rejectUnauthorized: false
+    } : undefined,
+    migrationsRun: process.env.NODE_ENV === 'production' ? true : false
 })
